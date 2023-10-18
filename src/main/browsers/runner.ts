@@ -74,23 +74,31 @@ export default () => {
 
   const init = (plugin, window: BrowserWindow) => {
     if (view === null || view === undefined) {
-      if (viewInstance.getView(plugin.name) && !commonConst.dev()) {
-        view = viewInstance.getView(plugin.name).view;
-        window.setBrowserView(view);
-        view.inited = true;
-        viewReadyFn(window, plugin);
-      } else {
-        createView(plugin, window);
-        viewInstance.addView(plugin.name, view);
-      }
+      createView(plugin, window);
+      // if (viewInstance.getView(plugin.name) && !commonConst.dev()) {
+      //   view = viewInstance.getView(plugin.name).view;
+      //   window.setBrowserView(view);
+      //   view.inited = true;
+      //   viewReadyFn(window, plugin);
+      // } else {
+      //   createView(plugin, window);
+      //   viewInstance.addView(plugin.name, view);
+      // }
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('@electron/remote/main').enable(view.webContents);
     }
   };
 
   const createView = (plugin, window: BrowserWindow) => {
-    const { tplPath, indexPath, development, name, main, pluginSetting, ext } =
-      plugin;
+    const {
+      tplPath,
+      indexPath,
+      development,
+      name,
+      main = 'index.html',
+      pluginSetting,
+      ext,
+    } = plugin;
     let pluginIndexPath = tplPath || indexPath;
     let preloadPath;
     let darkMode;
@@ -161,7 +169,7 @@ export default () => {
     window.removeBrowserView(view);
     window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     executeHooks('PluginOut', null);
-    window.webContents.executeJavaScript(`window.initRubick()`);
+    window.webContents?.executeJavaScript(`window.initRubick()`);
     view = undefined;
   };
 
@@ -175,7 +183,7 @@ export default () => {
           } catch(e) {} 
         }
       `;
-    view.webContents.executeJavaScript(evalJs);
+    view.webContents?.executeJavaScript(evalJs);
   };
 
   return {
