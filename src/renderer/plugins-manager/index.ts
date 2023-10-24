@@ -70,6 +70,9 @@ const createPluginManager = (): any => {
   const openPlugin = async (plugin, option) => {
     if (plugin.pluginType === 'ui' || plugin.pluginType === 'system') {
       if (state.currentPlugin && state.currentPlugin.name === plugin.name) {
+        ipcRenderer.sendSync('msg-trigger', {
+          type: 'showMainWindow',
+        });
         return;
       }
       await loadPlugin(plugin);
@@ -118,6 +121,7 @@ const createPluginManager = (): any => {
   const {
     options,
     searchFocus,
+    setOptionsRef,
     clipboardFile,
     clearClipboardFile,
     readClipboardContent,
@@ -169,6 +173,7 @@ const createPluginManager = (): any => {
   window.initRubick = () => {
     state.currentPlugin = {};
     setSearchValue('');
+    setOptionsRef([]);
     window.setSubInput({ placeholder: '' });
   };
 

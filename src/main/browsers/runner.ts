@@ -60,7 +60,7 @@ export default () => {
     const height = pluginSetting && pluginSetting.height;
     window.setSize(WINDOW_COMMON_WEIGHT, height || WINDOW_COMMON_HEIGHT);
     view.setBounds({ x: 0, y: 60, width: 800, height: height || 540 });
-    view.setAutoResize({ width: true });
+    view.setAutoResize({ width: true, height: true });
     executeHooks('PluginEnter', ext);
     executeHooks('PluginReady', ext);
     const config = await localConfig.getConfig();
@@ -167,7 +167,7 @@ export default () => {
   const removeView = (window: BrowserWindow) => {
     if (!view) return;
     window.removeBrowserView(view);
-    window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    // window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     executeHooks('PluginOut', null);
     window.webContents?.executeJavaScript(`window.initRubick()`);
     view = undefined;
@@ -176,14 +176,16 @@ export default () => {
   const getView = () => view;
 
   const executeHooks = (hook, data) => {
-    if (!view) return;
-    const evalJs = `if(window.rubick && window.rubick.hooks && typeof window.rubick.hooks.on${hook} === 'function' ) {     
-          try { 
+    setTimeout(() => {
+      if (!view) return;
+      const evalJs = `if(window.rubick && window.rubick.hooks && typeof window.rubick.hooks.on${hook} === 'function' ) {
+          try {
             window.rubick.hooks.on${hook}(${data ? JSON.stringify(data) : ''});
-          } catch(e) {} 
+          } catch(e) {}
         }
       `;
-    view.webContents?.executeJavaScript(evalJs);
+      view.webContents?.executeJavaScript(evalJs);
+    }, 300);
   };
 
   return {
