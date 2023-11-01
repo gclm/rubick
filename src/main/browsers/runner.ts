@@ -167,7 +167,9 @@ export default () => {
   const removeView = (window: BrowserWindow) => {
     if (!view) return;
     window.removeBrowserView(view);
-    // window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    window.setBrowserView(null);
+    view.webContents.destroy();
+    // window.setSize(800, 60);
     executeHooks('PluginOut', null);
     window.webContents?.executeJavaScript(`window.initRubick()`);
     view = undefined;
