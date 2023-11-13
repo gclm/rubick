@@ -1,5 +1,5 @@
 import { ref, watch } from 'vue';
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import { ipcRenderer } from 'electron';
 import { getGlobal } from '@electron/remote';
 import PinyinMatch from 'pinyin-match';
@@ -41,6 +41,17 @@ const optionsManager = ({
     options[0].click();
   });
 
+  const getIndex = (cmd, value) => {
+    let index = 0;
+    if (PinyinMatch.match(cmd.label || cmd, value)) {
+      index += 1;
+    }
+    if (cmd.label) {
+      index -= 1;
+    }
+    return index;
+  };
+
   const getOptionsFromSearchValue = (value, strict = false) => {
     const localPlugins = getGlobal('LOCAL_PLUGINS').getLocalPlugins();
     let options: any = [];
@@ -61,7 +72,7 @@ const optionsManager = ({
               desc: fe.explain,
               type: plugin.pluginType,
               match: PinyinMatch.match(cmd.label || cmd, value),
-              zIndex: cmd.label ? 0 : 1, // 排序权重
+              zIndex: getIndex(cmd, value), // 排序权重
               click: () => {
                 pluginClickEvent({
                   plugin,
@@ -117,7 +128,7 @@ const optionsManager = ({
         .map((plugin) => {
           const option = {
             ...plugin,
-            zIndex: 1,
+            zIndex: 0,
             click: () => {
               openPlugin(plugin, option);
             },
@@ -130,7 +141,7 @@ const optionsManager = ({
 
   watch(searchValue, () => search(searchValue.value));
   // search Input operation
-  const search = throttle((value) => {
+  const search = debounce((value) => {
     if (currentPlugin.value.name) return;
     if (clipboardFile.value.length) return;
     if (!value) {
@@ -138,7 +149,7 @@ const optionsManager = ({
       return;
     }
     optionsRef.value = getOptionsFromSearchValue(value);
-  }, 500);
+  }, 100);
 
   const setOptionsRef = (options) => {
     optionsRef.value = options;
