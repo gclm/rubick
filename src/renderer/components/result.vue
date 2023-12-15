@@ -7,7 +7,7 @@
       <a-row>
         <a-col
           @click="() => openPlugin(item)"
-          @contextmenu.prevent="openMenu($event,item)"
+          @contextmenu.prevent="openMenu($event, item)"
           :class="
             currentSelect === index ? 'active history-item' : 'history-item'
           "
@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import {defineEmits, defineProps, reactive, toRaw, watch} from 'vue';
+import { defineEmits, defineProps, reactive, toRaw, watch } from 'vue';
 const path = window.require('path');
 const remote = window.require('@electron/remote');
 
@@ -64,8 +64,14 @@ const props: any = defineProps({
     default: 0,
   },
   currentPlugin: {},
-  pluginHistory: (() => [])(),
-  clipboardFile: (() => [])(),
+  pluginHistory: {
+    type: Array,
+    default: (() => [])(),
+  },
+  clipboardFile: {
+    type: Array,
+    default: (() => [])(),
+  },
 });
 
 const emit = defineEmits(['choosePlugin', 'setPluginHistory']);
@@ -134,7 +140,9 @@ const initMainCmdMenus = () => {
       label: '从"使用记录"中删除',
       icon: path.join(__static, 'icons', 'delete@2x.png'),
       click: () => {
-        const history = props.pluginHistory.filter((item) => item.name !== menuState.plugin.name);
+        const history = props.pluginHistory.filter(
+          (item) => item.name !== menuState.plugin.name
+        );
         emit('setPluginHistory', toRaw(history));
       },
     },
