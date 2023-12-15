@@ -2,7 +2,7 @@ import { BrowserWindow, ipcMain, nativeTheme, screen } from 'electron';
 import localConfig from '../common/initLocalConfig';
 import commonConst from '@/common/utils/commonConst';
 import path from 'path';
-import { WINDOW_MIN_HEIGHT } from '@/common/constans/common';
+import { WINDOW_MIN_HEIGHT, WINDOW_WIDTH } from '@/common/constans/common';
 import mainInstance from '@/main';
 export default () => {
   let win: any;
@@ -22,6 +22,7 @@ export default () => {
       height: viewInfo.height,
       minHeight: WINDOW_MIN_HEIGHT,
       width: viewInfo.width,
+      minWidth: WINDOW_WIDTH,
       autoHideMenuBar: true,
       titleBarStyle: 'hidden',
       trafficLightPosition: { x: 12, y: 21 },
