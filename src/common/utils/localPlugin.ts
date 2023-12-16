@@ -31,6 +31,24 @@ let pluginInstance;
 
 global.LOCAL_PLUGINS = {
   PLUGINS: [],
+  async devInstall(plugin) {
+    console.log('plugin', plugin);
+    const pluginPath = path.normalize(plugin.localPath);
+    const pluginInfo = JSON.parse(
+      fs.readFileSync(path.join(pluginPath, './package.json'), 'utf8')
+    );
+    await pluginInstance.devInstall([plugin.localPath, pluginInfo.name], {
+      isDev: plugin.isDev,
+    });
+    plugin = {
+      ...plugin,
+      ...pluginInfo,
+    };
+    console.log('plugin', plugin);
+
+    global.LOCAL_PLUGINS.addPlugin(plugin);
+    return global.LOCAL_PLUGINS.PLUGINS;
+  },
   async downloadPlugin(plugin) {
     await pluginInstance.install([plugin.name], { isDev: plugin.isDev });
     if (plugin.isDev) {

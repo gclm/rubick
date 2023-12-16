@@ -11,6 +11,7 @@ import { ipcRenderer } from 'electron';
 import axios from 'axios';
 
 import npm from 'npm';
+import { PLUGIN_INSTALL_DIR as baseDir } from '@/common/constans/main';
 
 fixPath();
 
@@ -116,6 +117,38 @@ class AdapterHandler {
     await this.execCommand(installCmd, adapters);
   }
 
+  async devInstall(adapters: Array<string>, options: { isDev: boolean }) {
+    const pluginPath = adapters[0];
+    const pluginName = adapters[1];
+    console.log(pluginPath, pluginName);
+    await this.copyFolderAsync(
+      pluginPath,
+      path.resolve(this.baseDir, 'node_modules', pluginName)
+    );
+  }
+
+  async copyFolderAsync(source, target) {
+    try {
+      await fs.mkdir(target, { recursive: true });
+      const files = await fs.readdir(source);
+      for (const file of files) {
+        const sourcePath = path.join(source, file);
+        const targetPath = path.join(target, file);
+        const stat = await fs.stat(sourcePath);
+        if (stat.isDirectory()) {
+          // 如果是文件夹，递归复制
+          await this.copyFolderAsync(sourcePath, targetPath);
+        } else {
+          // 如果是文件，直接复制
+          await fs.copyFile(sourcePath, targetPath);
+        }
+      }
+      console.log('文件夹复制成功！');
+    } catch (error) {
+      console.error('文件夹复制失败:', error);
+    }
+  }
+
   /**
    * 更新指定插件
    * @param {...string[]} adapters 插件名称
@@ -185,40 +218,6 @@ class AdapterHandler {
           console.log(message);
         });
       });
-
-      // if (cmd !== 'link') {
-      //   args = args
-      //     .concat('--color=always')
-      //     .concat('--save')
-      //     .concat(`--registry=${this.registry}`);
-      // }
-
-      // const npm = spawn('npm', args, {
-      //   cwd: this.baseDir,
-      // });
-      //
-      // console.log(args);
-      //
-      // let output = '';
-      // npm.stdout
-      //   .on('data', (data: string) => {
-      //     output += data; // 获取输出日志
-      //   })
-      //   .pipe(process.stdout);
-      //
-      // npm.stderr
-      //   .on('data', (data: string) => {
-      //     output += data; // 获取报错日志
-      //   })
-      //   .pipe(process.stderr);
-      //
-      // npm.on('close', (code: number) => {
-      //   if (!code) {
-      //     resolve({ code: 0, data: output }); // 如果没有报错就输出正常日志
-      //   } else {
-      //     reject({ code: code, data: output }); // 如果报错就输出报错日志
-      //   }
-      // });
     });
   }
 }

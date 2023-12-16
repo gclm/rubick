@@ -21,6 +21,9 @@ window.market = {
   getLocalPlugins() {
     return remote.getGlobal('LOCAL_PLUGINS').getLocalPlugins();
   },
+  devInstall(plugin) {
+    return remote.getGlobal('LOCAL_PLUGINS').devInstall(plugin);
+  },
   downloadPlugin(plugin) {
     return remote.getGlobal('LOCAL_PLUGINS').downloadPlugin(plugin);
   },
@@ -39,8 +42,10 @@ window.market = {
   dbDump(target) {
     ipcSend('dbDump', { target });
   },
-
   dbImport(target) {
     ipcSend('dbImport', { target });
+  },
+  localSelect(data) {
+    return ipcSendSync('showOpenDialog', data);
   },
 };

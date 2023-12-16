@@ -4,6 +4,11 @@
   "author": "muwoo <2424880409@qq.com>",
   "private": true,
   "scripts": {
+    "main": "npm run electron:serve",
+    "feature": "cd feature & npm run serve",
+    "detach": "cd detach & npm run serve",
+    "tpl": "cd tpl & npm run serve",
+    "guide": "cd guide & npm run serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
