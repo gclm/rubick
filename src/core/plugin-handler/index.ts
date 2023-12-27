@@ -61,7 +61,7 @@ class AdapterHandler {
     const packageJSON = JSON.parse(
       fs.readFileSync(`${this.baseDir}/package.json`, 'utf-8')
     );
-    const registryUrl = `https://registry.npm.taobao.org/${name}`;
+    const registryUrl = `${this.registry}${name}`;
 
     // 从npm源中获取依赖包的最新版本
     try {
