@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { PluginHandler } from '@/core';
-import { PLUGIN_INSTALL_DIR as baseDir } from '@/common/constans/main';
+import { PLUGIN_INSTALL_DIR as baseDir } from '@/common/constants/main';
 import API from '@/main/common/api';
 
 const configPath = path.join(baseDir, './rubick-local-plugin.json');
@@ -33,11 +33,11 @@ global.LOCAL_PLUGINS = {
   PLUGINS: [],
   async devInstall(plugin) {
     console.log('plugin', plugin);
-    const pluginPath = path.normalize(plugin.localPath);
+    const pluginPath = path.normalize(plugin.path);
     const pluginInfo = JSON.parse(
       fs.readFileSync(path.join(pluginPath, './package.json'), 'utf8')
     );
-    await pluginInstance.devInstall([plugin.localPath, pluginInfo.name], {
+    await pluginInstance.devInstall([plugin.path, pluginInfo.name], {
       isDev: plugin.isDev,
     });
     plugin = {
@@ -49,6 +49,7 @@ global.LOCAL_PLUGINS = {
     global.LOCAL_PLUGINS.addPlugin(plugin);
     return global.LOCAL_PLUGINS.PLUGINS;
   },
+
   async downloadPlugin(plugin) {
     await pluginInstance.install([plugin.name], { isDev: plugin.isDev });
     if (plugin.isDev) {

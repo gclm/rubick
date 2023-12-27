@@ -6,7 +6,7 @@ const localConfig = {
     return data.data;
   },
 
-  setConfig(data) {
+  setConfig(data: any) {
     const localConfig: any = window.rubick.db.get(LOCAL_CONFIG_KEY) || {};
     window.rubick.db.put({
       _id: LOCAL_CONFIG_KEY,

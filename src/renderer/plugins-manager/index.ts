@@ -11,7 +11,7 @@ import optionsManager from './options';
 import {
   PLUGIN_INSTALL_DIR as baseDir,
   PLUGIN_HISTORY,
-} from '@/common/constans/renderer';
+} from '@/common/constants/renderer';
 import { message } from 'ant-design-vue';
 
 const createPluginManager = (): any => {

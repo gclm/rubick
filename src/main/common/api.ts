@@ -17,7 +17,7 @@ import ks from 'node-key-sender';
 import {
   DECODE_KEY,
   PLUGIN_INSTALL_DIR as baseDir,
-} from '@/common/constans/main';
+} from '@/common/constants/main';
 import getCopyFiles from '@/common/utils/getCopyFiles';
 import common from '@/common/utils/commonConst';
 
@@ -76,6 +76,7 @@ class API extends DBInstance {
   }
 
   public loadPlugin({ data: plugin }, window) {
+    console.log(`window.loadPlugin(${JSON.stringify(plugin)})`);
     window.webContents.executeJavaScript(
       `window.loadPlugin(${JSON.stringify(plugin)})`
     );
@@ -111,6 +112,7 @@ class API extends DBInstance {
         plugin.main || ''
       )}`;
     }
+    console.log(plugin);
     runnerInstance.init(plugin, window);
     this.currentPlugin = plugin;
     window.webContents.executeJavaScript(
@@ -236,6 +238,7 @@ class API extends DBInstance {
   }
 
   public setFeature({ data }, window) {
+    console.log(data);
     this.currentPlugin = {
       ...this.currentPlugin,
       features: (() => {
@@ -259,6 +262,7 @@ class API extends DBInstance {
   }
 
   public removeFeature({ data }, window) {
+    console.log(data);
     this.currentPlugin = {
       ...this.currentPlugin,
       features: this.currentPlugin.features.filter((feature) => {

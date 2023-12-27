@@ -241,8 +241,12 @@ const changeHideOnBlur = () => {
 };
 
 const getIcon = () => {
-  if (props.clipboardFile[0].dataUrl) return props.clipboardFile[0].dataUrl;
+  if (props.clipboardFile[0].dataUrl) {
+    console.log(props.clipboardFile[0].dataUrl);
+    return props.clipboardFile[0].dataUrl;
+  }
   try {
+    console.log(props.clipboardFile[0].path);
     return ipcRenderer.sendSync('msg-trigger', {
       type: 'getFileIcon',
       data: { path: props.clipboardFile[0].path },
@@ -255,9 +259,9 @@ const getIcon = () => {
 const handleResize = () => {
   windowWidthNew.value = window.innerWidth;
   if (Math.abs(windowWidthNew.value - windowWidthOld) >= 10) {
-    ipcRenderer.send('msg-trigger', {
-      type: 'detachPlugin',
-    });
+    // ipcRenderer.send('msg-trigger', {
+    //   type: 'detachPlugin',
+    // });
   }
 };
 

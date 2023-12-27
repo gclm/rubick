@@ -1,5 +1,5 @@
 export default {
-  version: 6,
+  version: 7,
   perf: {
     custom: {
       theme: 'SPRING',

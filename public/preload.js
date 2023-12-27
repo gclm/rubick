@@ -127,15 +127,15 @@ window.rubick = {
   setFeature(feature) {
     return ipcSendSync('setFeature', { feature });
   },
+  removeFeature(code) {
+    return ipcSendSync('removeFeature', { code });
+  },
   screenCapture(cb) {
     typeof cb === 'function' &&
       (window.rubick.hooks.onScreenCapture = ({ data }) => {
         cb(data);
       });
     ipcSendSync('screenCapture');
-  },
-  removeFeature(code) {
-    return ipcSendSync('removeFeature', { code });
   },
 
   // 系统

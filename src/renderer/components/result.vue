@@ -16,7 +16,7 @@
           :key="index"
         >
           <a-avatar style="width: 28px; height: 28px" :src="item.icon" />
-          <div class="name ellpise">
+          <div class="name ellipse">
             {{ item.cmd || item.pluginName || item._name || item.name }}
           </div>
           <div class="badge" v-if="item.pin"></div>
@@ -182,7 +182,7 @@ initMainCmdMenus();
 </script>
 
 <style lang="less">
-.ellpise {
+.ellipse {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

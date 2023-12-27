@@ -69,10 +69,10 @@ const onSubmit = () => {
 };
 
 const loading = ref(false);
-const downloadPlugin = async (localPath) => {
+const downloadPlugin = async (path) => {
   loading.value = true;
   await window.market.devInstall({
-    localPath: localPath,
+    path: path,
     isDev: true,
   });
   message.success(t('feature.dev.installSuccess'));

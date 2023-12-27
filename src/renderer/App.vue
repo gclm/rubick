@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="components-layout"
-    @mousedown="onMouseDown"
-  >
+  <div id="components-layout" @mousedown="onMouseDown">
     <Search
       :currentPlugin="currentPlugin"
       @changeCurrent="changeIndex"
@@ -41,7 +38,7 @@ import getWindowHeight from '../common/utils/getWindowHeight';
 import createPluginManager from './plugins-manager';
 import useDrag from '../common/utils/dragWindow';
 import { getGlobal } from '@electron/remote';
-import { PLUGIN_HISTORY } from '@/common/constans/renderer';
+import { PLUGIN_HISTORY } from '@/common/constants/renderer';
 import { message } from 'ant-design-vue';
 
 const { onMouseDown } = useDrag();
@@ -151,7 +148,9 @@ const choosePlugin = (plugin) => {
     });
     if (hasRemove) {
       const result = window.rubick.db.get(PLUGIN_HISTORY) || {};
-      const history = result.data.filter(item => item.originName !== currentChoose.originName);
+      const history = result.data.filter(
+        (item) => item.originName !== currentChoose.originName
+      );
       setPluginHistory(history);
       return message.warning('插件已被卸载！');
     }

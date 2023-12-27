@@ -11,7 +11,6 @@ import { ipcRenderer } from 'electron';
 import axios from 'axios';
 
 import npm from 'npm';
-import { PLUGIN_INSTALL_DIR as baseDir } from '@/common/constans/main';
 
 fixPath();
 
@@ -120,14 +119,13 @@ class AdapterHandler {
   async devInstall(adapters: Array<string>, options: { isDev: boolean }) {
     const pluginPath = adapters[0];
     const pluginName = adapters[1];
-    console.log(pluginPath, pluginName);
     await this.copyFolderAsync(
       pluginPath,
       path.resolve(this.baseDir, 'node_modules', pluginName)
     );
   }
 
-  async copyFolderAsync(source, target) {
+  async copyFolderAsync(source: string, target: string) {
     try {
       await fs.mkdir(target, { recursive: true });
       const files = await fs.readdir(source);
@@ -143,9 +141,9 @@ class AdapterHandler {
           await fs.copyFile(sourcePath, targetPath);
         }
       }
-      console.log('文件夹复制成功！');
+      console.log('copy success！');
     } catch (error) {
-      console.error('文件夹复制失败:', error);
+      console.error('copy error:', error);
     }
   }
 
@@ -165,9 +163,39 @@ class AdapterHandler {
    * @memberof AdapterHandler
    */
   async uninstall(adapters: string[], options: { isDev: boolean }) {
-    const installCmd = options.isDev ? 'unlink' : 'uninstall';
+    // const installCmd = options.isDev ? 'unlink' : 'uninstall';
     // 卸载插件
-    await this.execCommand(installCmd, adapters);
+    // await this.execCommand(installCmd, adapters);
+    if (options.isDev) {
+      // 递归删除
+      for (const adapter of adapters) {
+        await this.deleteFolderRecursive(
+          path.resolve(this.baseDir, 'node_modules', adapter)
+        );
+      }
+    } else {
+      await this.execCommand('uninstall', adapters);
+    }
+  }
+
+  async deleteFolderRecursive(folderPath: string) {
+    if (fs.existsSync(folderPath)) {
+      fs.readdirSync(folderPath).forEach((file) => {
+        const curPath = path.join(folderPath, file);
+        if (fs.lstatSync(curPath).isDirectory()) {
+          // 递归删除子文件夹
+          this.deleteFolderRecursive(curPath);
+        } else {
+          // 删除文件
+          fs.unlinkSync(curPath);
+        }
+      });
+      // 删除空文件夹
+      fs.rmdirSync(folderPath);
+      console.log(`Folder deleted: ${folderPath}`);
+    } else {
+      console.log(`Folder not found: ${folderPath}`);
+    }
   }
 
   /**

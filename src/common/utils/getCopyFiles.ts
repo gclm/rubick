@@ -6,7 +6,7 @@ import path from 'path';
 import ofs from 'original-fs';
 
 export default function getCopyFiles(): Array<any> | null {
-  let fileInfo;
+  let fileInfo: any;
   if (commonConst.macOS()) {
     if (!clipboard.has('NSFilenamesPboardType')) return null;
     const result = clipboard.read('NSFilenamesPboardType');
@@ -16,7 +16,7 @@ export default function getCopyFiles(): Array<any> | null {
     } catch (e) {
       return null;
     }
-  } else if (process.platform === 'win32') {
+  } else if (commonConst.windows()) {
     try {
       /* eslint-disable */
       const clipboardEx = require('electron-clipboard-ex');
