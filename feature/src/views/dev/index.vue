@@ -74,6 +74,7 @@ const downloadPlugin = async (path) => {
   await window.market.devInstall({
     path: path,
     isDev: true,
+    type: 'local',
   });
   message.success(t('feature.dev.installSuccess'));
   loading.value = false;

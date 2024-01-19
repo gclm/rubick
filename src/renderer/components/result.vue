@@ -65,12 +65,12 @@ const props: any = defineProps({
   },
   currentPlugin: {},
   pluginHistory: {
-    type: Array,
-    default: (() => [])(),
+    type: Function,
+    default: () => [],
   },
   clipboardFile: {
-    type: Array,
-    default: (() => [])(),
+    type: Function,
+    default: () => [],
   },
 });
 

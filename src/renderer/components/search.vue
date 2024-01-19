@@ -53,9 +53,6 @@ import { defineProps, defineEmits, ref, onMounted, onUnmounted } from 'vue';
 import { ipcRenderer } from 'electron';
 import { MoreOutlined } from '@ant-design/icons-vue';
 
-const windowWidthOld = window.innerWidth;
-let windowWidthNew = ref(window.innerWidth);
-
 const remote = window.require('@electron/remote');
 import localConfig from '../confOp';
 const { Menu } = remote;
@@ -255,23 +252,6 @@ const getIcon = () => {
     return require('../assets/file.png');
   }
 };
-
-const handleResize = () => {
-  windowWidthNew.value = window.innerWidth;
-  if (Math.abs(windowWidthNew.value - windowWidthOld) >= 10) {
-    // ipcRenderer.send('msg-trigger', {
-    //   type: 'detachPlugin',
-    // });
-  }
-};
-
-onMounted(() => {
-  window.addEventListener('resize', handleResize);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize);
-});
 
 const newWindow = () => {
   ipcRenderer.send('msg-trigger', {

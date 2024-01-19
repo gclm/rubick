@@ -129,7 +129,10 @@ global.LOCAL_PLUGINS = {
     fs.writeFileSync(configPath, JSON.stringify(global.LOCAL_PLUGINS.PLUGINS));
   },
   async deletePlugin(plugin) {
-    await pluginInstance.uninstall([plugin.name], { isDev: plugin.isDev });
+    await pluginInstance.uninstall([plugin.name], {
+      isDev: plugin.isDev,
+      type: plugin.type,
+    });
     global.LOCAL_PLUGINS.PLUGINS = global.LOCAL_PLUGINS.PLUGINS.filter(
       (p) => plugin.name !== p.name
     );

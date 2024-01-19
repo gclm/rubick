@@ -28,7 +28,7 @@ export default () => {
       resizable: true,
       width: WINDOW_WIDTH,
       minWidth: WINDOW_WIDTH,
-      maxWidth: WINDOW_WIDTH + 10,
+      maxWidth: WINDOW_WIDTH,
       frame: false,
       title: '拉比克',
       show: false,

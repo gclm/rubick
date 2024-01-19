@@ -162,11 +162,11 @@ class AdapterHandler {
    * @param options
    * @memberof AdapterHandler
    */
-  async uninstall(adapters: string[], options: { isDev: boolean }) {
-    // const installCmd = options.isDev ? 'unlink' : 'uninstall';
-    // 卸载插件
-    // await this.execCommand(installCmd, adapters);
-    if (options.isDev) {
+  async uninstall(
+    adapters: string[],
+    options: { isDev: boolean; type: string }
+  ) {
+    if (options.isDev && options.type === 'local') {
       // 递归删除
       for (const adapter of adapters) {
         await this.deleteFolderRecursive(
@@ -174,7 +174,9 @@ class AdapterHandler {
         );
       }
     } else {
-      await this.execCommand('uninstall', adapters);
+      const installCmd = options.isDev ? 'unlink' : 'uninstall';
+      // 卸载插件;
+      await this.execCommand(installCmd, adapters);
     }
   }
 
