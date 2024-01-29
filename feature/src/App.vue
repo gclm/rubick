@@ -8,37 +8,37 @@
       >
         <a-menu-item key="finder">
           <template #icon>
-            <StarOutlined style="font-size: 18px;" />
+            <StarOutlined style="font-size: 18px" />
           </template>
           {{ $t('feature.market.explore') }}
         </a-menu-item>
         <a-menu-item key="worker">
           <template #icon>
-            <SendOutlined style="transform: rotate(-45deg); font-size: 18px;" />
+            <SendOutlined style="transform: rotate(-45deg); font-size: 18px" />
           </template>
           {{ $t('feature.market.efficiency') }}
         </a-menu-item>
         <a-menu-item key="tools">
           <template #icon>
-            <SearchOutlined style="font-size: 18px;" />
+            <SearchOutlined style="font-size: 18px" />
           </template>
           {{ $t('feature.market.searchTool') }}
         </a-menu-item>
         <a-menu-item key="image">
           <template #icon>
-            <FileImageOutlined style="font-size: 18px;" />
+            <FileImageOutlined style="font-size: 18px" />
           </template>
           {{ $t('feature.market.imageTool') }}
         </a-menu-item>
         <a-menu-item key="devPlugin">
           <template #icon>
-            <CodeOutlined style="font-size: 18px;" />
+            <CodeOutlined style="font-size: 18px" />
           </template>
           {{ $t('feature.market.developTool') }}
         </a-menu-item>
         <a-menu-item key="system">
           <template #icon>
-            <DatabaseOutlined style="font-size: 18px;" />
+            <DatabaseOutlined style="font-size: 18px" />
           </template>
           {{ $t('feature.market.systemTool') }}
         </a-menu-item>
@@ -50,7 +50,9 @@
               </template>
             </a-avatar>
           </template>
-          <template #title>{{ perf.custom.username }}</template>
+          <template #title>
+            {{ perf.custom.username }}
+          </template>
           <a-menu-item key="settings">
             <template #icon>
               <SettingOutlined />
@@ -72,7 +74,21 @@
         </a-sub-menu>
       </a-menu>
     </div>
-    <div :class="['finder', 'result', 'devPlugin', 'image', 'tools', 'worker', 'system'].includes(active[0]) ? 'container' : 'more'">
+    <div
+      :class="
+        [
+          'finder',
+          'result',
+          'devPlugin',
+          'image',
+          'tools',
+          'worker',
+          'system',
+        ].includes(active[0])
+          ? 'container'
+          : 'more'
+      "
+    >
       <keep-alive>
         <router-view />
       </keep-alive>
@@ -103,14 +119,14 @@ const active = computed(() => store.state.active);
 const { perf } = localConfig.getConfig();
 
 const changeMenu = (key: any) => {
-  store.commit('commonUpdate', {active: [key]})
+  store.commit('commonUpdate', { active: [key] });
   router.push(key);
 };
 
 window.rubick.onPluginEnter(({ code }: { code: string }) => {
   code = code === '已安装插件' ? 'installed' : code;
   changeMenu(code);
-  store.commit('commonUpdate', {active: [code]})
+  store.commit('commonUpdate', { active: [code] });
 });
 
 window.rubick.setSubInput((e: any) => {
@@ -129,7 +145,7 @@ window.rubick.setSubInput((e: any) => {
       store.commit('setSearchValue', e.text);
       router.push('result');
     } else {
-      store.commit('commonUpdate', {active: ['finder']})
+      store.commit('commonUpdate', { active: ['finder'] });
       router.push('finder');
     }
   }
@@ -144,13 +160,16 @@ init();
     background: var(--color-body-bg2) !important;
     height: 100%;
     border-right: none;
-    .ant-menu-item, .ant-menu-submenu, .ant-menu-submenu-arrow {
+    .ant-menu-item,
+    .ant-menu-submenu,
+    .ant-menu-submenu-arrow {
       color: var(--color-text-content);
       &:active {
         background: none;
       }
     }
-    .ant-menu-item-selected, .ant-menu-submenu-selected {
+    .ant-menu-item-selected,
+    .ant-menu-submenu-selected {
       background-color: var(--color-list-hover);
       color: var(--ant-primary-color);
       .ant-menu-submenu-arrow {
@@ -220,6 +239,7 @@ init();
     :deep(.user-info) {
       position: absolute;
       bottom: 32px;
+      width: 90%;
     }
     :deep(.ant-avatar) {
       background: transparent;
