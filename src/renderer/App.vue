@@ -41,6 +41,7 @@ import useDrag from '../common/utils/dragWindow';
 import { getGlobal } from '@electron/remote';
 import { PLUGIN_HISTORY } from '@/common/constants/renderer';
 import { message } from 'ant-design-vue';
+import localConfig from './confOp';
 
 const { onMouseDown } = useDrag();
 const remote = window.require('@electron/remote');
@@ -71,6 +72,8 @@ initPlugins();
 const currentSelect = ref(0);
 const menuPluginInfo: any = ref({});
 
+const config: any = ref(localConfig.getConfig());
+
 getPluginInfo({
   pluginName: 'feature',
   // eslint-disable-next-line no-undef
@@ -88,7 +91,7 @@ watch(
     window.rubick.setExpendHeight(
       getWindowHeight(
         options.value,
-        pluginLoading.value ? [] : pluginHistory.value
+        (pluginLoading.value || !config.value.perf.common.history) ? [] : pluginHistory.value
       )
     );
   },

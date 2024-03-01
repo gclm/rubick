@@ -25,6 +25,7 @@ export default {
       autoPast: false,
       darkMode: false,
       guide: false,
+      history: true,
       lang: 'zh-CN',
     },
     local: {
