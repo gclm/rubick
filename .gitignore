@@ -3,6 +3,8 @@ node_modules
 build/*
 !build/icons
 
+yarn.lock
+package-lock.json
 
 # local env files
 .env.local
