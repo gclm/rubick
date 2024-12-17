@@ -391,11 +391,12 @@ const resetDefault = (key) => {
   switch (key) {
     case 'Alt':
       state.shortCut['showAndHidden'] = 'Option+SPACE';
-      // copyValue.value = "Option+SPACE";
       break;
     case 'Ctrl':
       state.shortCut['showAndHidden'] = 'Ctrl+SPACE';
-      // copyValue.value = "Ctrl+SPACE";
+      break;
+    case 'Command':
+      state.shortCut['showAndHidden'] = 'Command+SPACE';
       break;
     default:
       break;

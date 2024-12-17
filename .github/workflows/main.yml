@@ -5,9 +5,11 @@ name: Build
 
 # Workflow's trigger
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
+      - gclm
 
 # Workflow's jobs
 jobs:
@@ -59,7 +61,7 @@ jobs:
           yarn
           npm run build
       - name: Build  & release app
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm run release
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
