@@ -64,4 +64,6 @@ jobs:
         run: |
           npm run release
         env:
+          # 使用你配置的 GH_TOKEN
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
