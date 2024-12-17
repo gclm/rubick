@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - master
+      - gclm
 
 # Workflow's jobs
 jobs:
