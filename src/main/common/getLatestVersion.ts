@@ -14,11 +14,11 @@ export const getLatestVersion = async (isCheckBetaUpdate = false) => {
       .then((r) => {
         const list = r.data;
         if (isCheckBetaUpdate) {
-          const betaList = list.filter((item) => item.name.includes('beta'));
-          return betaList[0].name;
+          const betaList = list.filter((item) => item.name?.includes('beta'));
+          return betaList[0]?.name || '';
         }
-        const normalList = list.filter((item) => !item.name.includes('beta'));
-        return normalList[0].name;
+        const normalList = list.filter((item) => !item.name?.includes('beta'));
+        return normalList[0]?.name || '';
       });
   } catch (err) {
     console.log(err);

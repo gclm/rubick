@@ -4,7 +4,6 @@ const os = require('os');
 const path = require('path');
 
 const appPath = app.getPath('userData');
-
 const baseDir = path.join(appPath, './rubick-plugins-new');
 
 const ipcSendSync = (type, data) => {
@@ -52,7 +51,6 @@ window.rubick = {
   showSaveDialog(options) {
     return ipcSendSync('showSaveDialog', options);
   },
-
   setExpendHeight(height) {
     ipcSendSync('setExpendHeight', height);
   },
@@ -98,7 +96,7 @@ window.rubick = {
     postAttachment: (docId, attachment, type) =>
       ipcSendSync('dbPostAttachment', { docId, attachment, type }),
     getAttachment: (docId) => ipcSendSync('dbGetAttachment', { docId }),
-    getAttachmentType: (docId) => ipcSendSync('dbGetAttachmentType', { docId }),
+    getAttachmentType: (docId) => ipcSendSync('dbGetAttachmentType', { docId })
   },
   dbStorage: {
     setItem: (key, value) => {
@@ -119,7 +117,7 @@ window.rubick = {
     },
   },
   isDarkColors() {
-    return false;
+    return nativeTheme.shouldUseDarkColors;
   },
   getFeatures() {
     return ipcSendSync('getFeatures');
@@ -127,80 +125,55 @@ window.rubick = {
   setFeature(feature) {
     return ipcSendSync('setFeature', { feature });
   },
-  screenCapture(cb) {
-    typeof cb === 'function' &&
-      (window.rubick.hooks.onScreenCapture = ({ data }) => {
-        cb(data);
-      });
-    ipcSendSync('screenCapture');
-  },
   removeFeature(code) {
     return ipcSendSync('removeFeature', { code });
   },
-
-  // 系统
   shellOpenExternal(url) {
     shell.openExternal(url);
   },
-
   isMacOs() {
-    return os.type() === 'Darwin';
+    return process.platform === 'darwin';
   },
-
   isWindows() {
-    return os.type() === 'Windows_NT';
+    return process.platform === 'win32';
   },
-
   isLinux() {
-    return os.type() === 'Linux';
+    return process.platform === 'linux';
   },
-
   shellOpenPath(path) {
     shell.openPath(path);
   },
-
   getLocalId: () => ipcSendSync('getLocalId'),
-
   removePlugin() {
     ipcSend('removePlugin');
   },
-
   shellShowItemInFolder: (path) => {
     ipcSend('shellShowItemInFolder', { path });
   },
-
   redirect: (label, payload) => {
     // todo
   },
-
   shellBeep: () => {
     ipcSend('shellBeep');
   },
-
   getFileIcon: (path) => {
     return ipcSendSync('getFileIcon', { path });
   },
-
   getCopyedFiles: () => {
     return ipcSendSync('getCopyFiles');
   },
-
   simulateKeyboardTap: (key, ...modifier) => {
     ipcSend('simulateKeyboardTap', { key, modifier });
   },
-
   getCursorScreenPoint: () => {
     return screen.getCursorScreenPoint();
   },
-
   getDisplayNearestPoint: (point) => {
     return screen.getDisplayNearestPoint(point);
   },
-
   outPlugin: () => {
     return ipcSend('removePlugin');
   },
-
   createBrowserWindow: (url, options, callback) => {
     const winUrl = path.resolve(baseDir, 'node_modules', options.name);
     const winIndex = `file://${path.join(winUrl, './', url || '')}`;
@@ -212,7 +185,7 @@ window.rubick = {
     let win = new BrowserWindow({
       useContentSize: true,
       resizable: true,
-      title: '拉比克',
+      title: 'Rubick',
       show: false,
       backgroundColor: nativeTheme.shouldUseDarkColors ? '#1c1c28' : '#fff',
       ...options,
@@ -241,4 +214,28 @@ window.rubick = {
     });
     return win;
   },
+  changeTheme: () => {
+    const isDark = nativeTheme.shouldUseDarkColors;
+    window.rubick.theme = isDark ? 'dark' : 'light';
+  },
+  theme: nativeTheme.shouldUseDarkColors ? 'dark' : 'light',
 };
+
+// 添加 uTools 兼容层
+if (window.rubick && window.rubick.db) {
+  const { UToolsAPI } = require('../src/utils/utools');
+  const { DbWrapper } = require('../src/utils/db');
+  
+  try {
+    const dbWrapper = new DbWrapper(window.rubick.db);
+    window.utools = new UToolsAPI(window.rubick, dbWrapper);
+  } catch (e) {
+    console.error('Failed to initialize uTools API:', e);
+  }
+}
+
+// 添加全局的未处理 Promise 异常处理
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled promise rejection:', event.reason);
+  event.preventDefault();
+});

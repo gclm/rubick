@@ -69,9 +69,12 @@ export default class DB {
       const result: DocRes = await this.pouchDB.put(doc);
       doc._id = result.id = this.replaceDocId(name, result.id);
       return result;
-    } catch (e: any) {
-      doc._id = this.replaceDocId(name, doc._id);
-      return { id: doc._id, name: e.name, error: !0, message: e.message };
+    } catch (e) {
+      if (e instanceof Error) {
+        doc._id = this.replaceDocId(name, doc._id);
+        return { id: doc._id, name: e.name, error: !0, message: e.message };
+      }
+      return this.errorInfo('unknown', String(e));
     }
   }
 
@@ -103,11 +106,14 @@ export default class DB {
       const result: DocRes = await this.pouchDB.remove(target);
       target._id = result.id = this.replaceDocId(name, result.id);
       return result;
-    } catch (e: any) {
-      if ('object' === typeof doc) {
-        doc._id = this.replaceDocId(name, doc._id);
+    } catch (e) {
+      if (e instanceof Error) {
+        if ('object' === typeof doc) {
+          doc._id = this.replaceDocId(name, doc._id);
+        }
+        return this.errorInfo(e.name, e.message);
       }
-      return this.errorInfo(e.name, e.message);
+      return this.errorInfo('unknown', String(e));
     }
   }
 
@@ -143,7 +149,10 @@ export default class DB {
         doc._id = this.replaceDocId(name, doc._id);
       });
     } catch (e) {
-      //
+      if (e instanceof Error) {
+        return this.errorInfo(e.name, e.message);
+      }
+      return this.errorInfo('unknown', String(e));
     }
     return result;
   }
@@ -178,7 +187,10 @@ export default class DB {
         }
       });
     } catch (e) {
-      //
+      if (e instanceof Error) {
+        return this.errorInfo(e.name, e.message);
+      }
+      return this.errorInfo('unknown', String(e));
     }
     return result;
   }
@@ -227,7 +239,10 @@ export default class DB {
       result.id = this.replaceDocId(name, result.id);
       return result;
     } catch (e) {
-      return this.errorInfo(e.name, e.message);
+      if (e instanceof Error) {
+        return this.errorInfo(e.name, e.message);
+      }
+      return this.errorInfo('unknown', String(e));
     }
   }
 
