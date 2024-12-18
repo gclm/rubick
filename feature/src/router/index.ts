@@ -57,6 +57,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/dev/index.vue'),
   },
   {
+    path: '/utools',
+    name: 'utools',
+    component: () => import('../views/utools/index.vue'),
+  },
+  {
     path: '/:catchAll(.*)',
     name: 'finder',
     component: () => import('../views/market/components/finder.vue'),

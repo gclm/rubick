@@ -23,6 +23,7 @@ import '../common/utils/localPlugin';
 
 import checkVersion from './common/versionHandler';
 import registerSystemPlugin from './common/registerSystemPlugin';
+import UtoolsConverter from './plugins/utools/converter';
 
 class App {
   public windowCreator: { init: () => void; getWindow: () => BrowserWindow };
@@ -42,8 +43,11 @@ class App {
       this.onReady();
       this.onRunning();
       this.onQuit();
+      const converter = new UtoolsConverter(app.getPath('userData'));
+      converter.registerIPC();
     }
   }
+
   beforeReady() {
     // 系统托盘
     if (commonConst.macOS()) {
@@ -61,6 +65,7 @@ class App {
   createWindow() {
     this.windowCreator.init();
   }
+
   onReady() {
     const readyFunction = async () => {
       checkVersion();

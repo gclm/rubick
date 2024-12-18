@@ -112,6 +112,17 @@ export default {
         installSuccess: '{pluginName}安装成功！',
         refreshSuccess: '{pluginName}刷新成功！',
       },
+      utools: {
+        title: 'upx 插件转换',
+        plugin: {
+          import: 'upx 插件导入',
+          dragTip: '点击或拖拽 upx 文件到此处',
+          converted: '已转换插件',
+          remove: '移除',
+          importSuccess: '插件导入成功',
+          importError: '插件导入失败'
+        }
+      }
     },
   },
 };

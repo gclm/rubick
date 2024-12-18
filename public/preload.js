@@ -95,8 +95,7 @@ window.rubick = {
     remove: (doc) => ipcSendSync('dbRemove', { doc }),
     bulkDocs: (docs) => ipcSendSync('dbBulkDocs', { docs }),
     allDocs: (key) => ipcSendSync('dbAllDocs', { key }),
-    postAttachment: (docId, attachment, type) =>
-      ipcSendSync('dbPostAttachment', { docId, attachment, type }),
+    postAttachment: (docId, attachment, type) => ipcSendSync('dbPostAttachment', { docId, attachment, type }),
     getAttachment: (docId) => ipcSendSync('dbGetAttachment', { docId }),
     getAttachmentType: (docId) => ipcSendSync('dbGetAttachmentType', { docId }),
   },
@@ -241,4 +240,97 @@ window.rubick = {
     });
     return win;
   },
+
+  // 添加 utools 相关方法
+  utools: {
+    // 转换插件
+    convertPlugin: async (buffer) => {
+      return ipcSendSync('utools:convert', buffer);
+    },
+    
+    // 加载插件列表
+    loadPlugins: () => {
+      return ipcSendSync('utools:loadPlugins');
+    },
+    
+    // 移除插件
+    removePlugin: (pluginName) => {
+      return ipcSendSync('utools:removePlugin', pluginName);
+    }
+  }
 };
+
+// uTools API 兼容层
+window.utools = {
+  hooks: {},
+  __event__: {},
+  // 数据库 API - 直接使用 rubick 的 dbStorage
+  db: {
+    put: (doc) => window.rubick.dbStorage.setItem(doc._id, doc),
+    get: (id) => window.rubick.dbStorage.getItem(id),
+    remove: (doc) => window.rubick.dbStorage.removeItem(typeof doc === 'string' ? doc : doc._id),
+    bulkDocs: (docs) => docs.map(doc => window.rubick.dbStorage.setItem(doc._id, doc)),
+    allDocs: (key) => window.rubick.db.allDocs(key),
+    postAttachment: (docId, attachment, type) => ipcSendSync('dbPostAttachment', { docId, attachment, type }),
+    getAttachment: (docId) => ipcSendSync('dbGetAttachment', { docId }),
+    getAttachmentType: (docId) => ipcSendSync('dbGetAttachmentType', { docId }),
+  },
+
+  // 剪贴板 - 直接使用 rubick 的剪贴板方法
+  copyText: window.rubick.copyText,
+  copyImage: window.rubick.copyImage,
+  copyFile: window.rubick.copyFile,
+  getCopyedFiles: window.rubick.getCopyedFiles,
+
+  // 系统 - 直接使用 rubick 的系统方法
+  showNotification: window.rubick.showNotification,
+  shellBeep: window.rubick.shellBeep,
+  shellOpenPath: window.rubick.shellOpenPath,
+  shellShowItemInFolder: window.rubick.shellShowItemInFolder,
+  shellOpenExternal: window.rubick.shellOpenExternal,
+
+  // 口 - 直接使用 rubick 的窗口方法
+  hideMainWindow: window.rubick.hideMainWindow,
+  showMainWindow: window.rubick.showMainWindow,
+  setExpendHeight: window.rubick.setExpendHeight,
+  setSubInput: window.rubick.setSubInput,
+  removeSubInput: window.rubick.removeSubInput,
+  setSubInputValue: window.rubick.setSubInputValue,
+
+  // 对话框 - 直接使用 rubick 的对话框方法
+  showOpenDialog: window.rubick.showOpenDialog,
+  showSaveDialog: window.rubick.showSaveDialog,
+
+  // 屏幕 - 直接使用 rubick 的屏幕方法
+  getCursorScreenPoint: window.rubick.getCursorScreenPoint,
+  getDisplayNearestPoint: window.rubick.getDisplayNearestPoint,
+  screenCapture: window.rubick.screenCapture,
+
+  // 键盘 - 直接使用 rubick 的键盘方法
+  simulateKeyboardTap: window.rubick.simulateKeyboardTap,
+
+  // 系统信息 - 直接使用 rubick 的系统信息方法
+  isDarkColors: window.rubick.isDarkColors,
+  isMacOs: window.rubick.isMacOs,
+  isWindows: window.rubick.isWindows,
+  isLinux: window.rubick.isLinux,
+
+  // 插件 - 直接使用 rubick 的插件方法
+  getFeatures: window.rubick.getFeatures,
+  setFeature: window.rubick.setFeature,
+  removeFeature: window.rubick.removeFeature,
+  
+  // 事件 - 直接使用 rubick 的事件方法
+  onPluginEnter: window.rubick.onPluginEnter,
+  onPluginReady: window.rubick.onPluginReady,
+  onPluginOut: window.rubick.onPluginOut,
+
+  // 其他方法
+  redirect: window.rubick.redirect,
+  outPlugin: window.rubick.outPlugin,
+  createBrowserWindow: window.rubick.createBrowserWindow,
+  getPath: window.rubick.getPath,
+  getFileIcon: window.rubick.getFileIcon,
+  getLocalId: window.rubick.getLocalId
+};
+

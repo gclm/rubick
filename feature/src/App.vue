@@ -69,6 +69,12 @@
             </template>
             {{ $t('feature.dev.title') }}
           </a-menu-item>
+          <a-menu-item key="utools">
+            <template #icon>
+              <ToolOutlined />
+            </template>
+            {{ $t('feature.utools.title') }}
+          </a-menu-item>
         </a-sub-menu>
       </a-menu>
     </div>
@@ -107,6 +113,7 @@ import {
   SettingOutlined,
   HeartOutlined,
   BugOutlined,
+  ToolOutlined,
 } from '@ant-design/icons-vue';
 import { useStore } from 'vuex';
 import localConfig from '@/confOp';

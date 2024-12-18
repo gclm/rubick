@@ -18,6 +18,8 @@ const ipcSend = (type, data) => {
 };
 
 window.market = {
+  ipcSendSync,
+  ipcSend,
   getLocalPlugins() {
     return remote.getGlobal('LOCAL_PLUGINS').getLocalPlugins();
   },
