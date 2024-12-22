@@ -397,6 +397,9 @@ const resetDefault = (key) => {
       state.shortCut['showAndHidden'] = 'Ctrl+SPACE';
       // copyValue.value = "Ctrl+SPACE";
       break;
+    case 'Command':
+      state.shortCut['showAndHidden'] = 'Command+SPACE';
+      break;
     default:
       break;
   }
