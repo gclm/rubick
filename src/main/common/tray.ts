@@ -30,6 +30,12 @@ function createTray(window: BrowserWindow): Promise<Tray> {
     const createContextMenu = () =>
       Menu.buildFromTemplate([
         {
+          label: '开发者工具',
+          click() {
+            window.webContents.toggleDevTools();
+          },
+        },
+        {
           label: '帮助文档',
           click: () => {
             process.nextTick(() => {
