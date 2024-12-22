@@ -35,10 +35,22 @@ class AdapterHandler {
     // 初始化插件存放
     if (!fs.existsSync(options.baseDir)) {
       fs.mkdirsSync(options.baseDir);
-      fs.writeFileSync(
-        `${options.baseDir}/package.json`,
-        '{"dependencies":{}}'
-      );
+    } else {
+      fs.stat(`${options.baseDir}/package.json`, (err, stats) => {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            // 文件不存在
+            fs.writeFileSync(
+              `${options.baseDir}/package.json`,
+              '{"dependencies":{}}'
+            );
+          } else {
+            // 其他错误
+          }
+        } else {
+          // 文件存在
+        }
+      });
     }
     this.baseDir = options.baseDir;
 

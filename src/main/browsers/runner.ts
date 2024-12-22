@@ -151,7 +151,6 @@ export default () => {
     });
     window.setBrowserView(view);
     view.webContents.loadURL(pluginIndexPath);
-    console.log(pluginIndexPath);
     view.webContents.once('dom-ready', () => viewReadyFn(window, plugin));
     // 修复请求跨域问题
     view.webContents.session.webRequest.onBeforeSendHeaders(
