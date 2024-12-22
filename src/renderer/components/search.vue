@@ -25,6 +25,8 @@
       ref="mainInput"
       class="main-input"
       @input="(e) => changeValue(e)"
+      @keydown.left="(e) => keydownEvent(e, 'left')"
+      @keydown.right="(e) => keydownEvent(e, 'right')"
       @keydown.down="(e) => keydownEvent(e, 'down')"
       @keydown.tab="(e) => keydownEvent(e, 'down')"
       @keydown.up="(e) => keydownEvent(e, 'up')"
@@ -101,7 +103,7 @@ const emit = defineEmits([
 ]);
 
 const keydownEvent = (e, key: string) => {
-  e.preventDefault();
+  key !== 'space' && e.preventDefault();
   const { ctrlKey, shiftKey, altKey, metaKey } = e;
   const modifiers: Array<string> = [];
   ctrlKey && modifiers.push('control');
@@ -125,12 +127,19 @@ const keydownEvent = (e, key: string) => {
     case 'down':
       emit('changeCurrent', 1);
       break;
+    case 'left':
+      emit('changeCurrent', -1);
+      break;
+    case 'right':
+      emit('changeCurrent', 1);
+      break;
     case 'enter':
       if (runPluginDisable) return;
       emit('choosePlugin');
       break;
     case 'space':
       if (runPluginDisable || !config.value.perf.common.space) return;
+      e.preventDefault();
       emit('choosePlugin');
       break;
     default:

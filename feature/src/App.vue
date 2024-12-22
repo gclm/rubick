@@ -8,37 +8,37 @@
       >
         <a-menu-item key="finder">
           <template #icon>
-            <StarOutlined style="font-size: 18px" />
+            <StarOutlined style="font-size: 16px" />
           </template>
           {{ $t('feature.market.explore') }}
         </a-menu-item>
         <a-menu-item key="worker">
           <template #icon>
-            <SendOutlined style="transform: rotate(-45deg); font-size: 18px" />
+            <SendOutlined style="transform: rotate(-45deg); font-size: 16px" />
           </template>
           {{ $t('feature.market.efficiency') }}
         </a-menu-item>
         <a-menu-item key="tools">
           <template #icon>
-            <SearchOutlined style="font-size: 18px" />
+            <SearchOutlined style="font-size: 16px" />
           </template>
           {{ $t('feature.market.searchTool') }}
         </a-menu-item>
         <a-menu-item key="image">
           <template #icon>
-            <FileImageOutlined style="font-size: 18px" />
+            <FileImageOutlined style="font-size: 16px" />
           </template>
           {{ $t('feature.market.imageTool') }}
         </a-menu-item>
         <a-menu-item key="devPlugin">
           <template #icon>
-            <CodeOutlined style="font-size: 18px" />
+            <CodeOutlined style="font-size: 16px" />
           </template>
           {{ $t('feature.market.developTool') }}
         </a-menu-item>
         <a-menu-item key="system">
           <template #icon>
-            <DatabaseOutlined style="font-size: 18px" />
+            <DatabaseOutlined style="font-size: 16px" />
           </template>
           {{ $t('feature.market.systemTool') }}
         </a-menu-item>
@@ -50,9 +50,7 @@
               </template>
             </a-avatar>
           </template>
-          <template #title>
-            {{ perf.custom.username }}
-          </template>
+          <template #title>{{ perf.custom.username }}</template>
           <a-menu-item key="settings">
             <template #icon>
               <SettingOutlined />
@@ -222,9 +220,12 @@ init();
     background: var(--color-body-bg2);
   }
   .left-menu {
-    padding: 24px 16px;
+    padding: 16px;
     position: relative;
     height: 100vh;
+    :deep(.ant-menu) {
+      width: 100%;
+    }
     :deep(.ant-menu-item) {
       padding-left: 12px !important;
       display: flex;
@@ -238,8 +239,14 @@ init();
     }
     :deep(.user-info) {
       position: absolute;
-      bottom: 32px;
-      width: 90%;
+      bottom: 16px;
+      width: calc(100% - 32px);
+      .ant-menu-submenu-title {
+        padding: 0 32px 0 8px;
+        .ant-menu-title-content {
+          margin-left: 8px;
+        }
+      }
     }
     :deep(.ant-avatar) {
       background: transparent;

@@ -79,6 +79,10 @@ const createPluginManager = (): any => {
   };
 
   const openPlugin = async (plugin, option) => {
+    ipcRenderer.send('msg-trigger', {
+      type: 'removePlugin',
+    });
+    window.initRubick();
     if (plugin.pluginType === 'ui' || plugin.pluginType === 'system') {
       if (state.currentPlugin && state.currentPlugin.name === plugin.name) {
         window.rubick.showMainWindow();
@@ -105,7 +109,6 @@ const createPluginManager = (): any => {
         message.error('启动应用出错，请确保启动应用存在！');
       }
     }
-    window.initRubick();
     changePluginHistory({
       ...plugin,
       ...option,
