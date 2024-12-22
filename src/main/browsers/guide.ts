@@ -4,7 +4,7 @@ import {
   GUIDE_WIDTH,
   WINDOW_MIN_HEIGHT,
   GUIDE_HEIGHT,
-} from '@/common/constans/common';
+} from '@/common/constants/common';
 
 const getWindowPos = (width, height) => {
   const screenPoint = screen.getCursorScreenPoint();

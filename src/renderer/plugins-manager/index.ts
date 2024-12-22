@@ -11,7 +11,7 @@ import optionsManager from './options';
 import {
   PLUGIN_INSTALL_DIR as baseDir,
   PLUGIN_HISTORY,
-} from '@/common/constans/renderer';
+} from '@/common/constants/renderer';
 import { message } from 'ant-design-vue';
 
 const createPluginManager = (): any => {
@@ -72,6 +72,8 @@ const createPluginManager = (): any => {
     state.currentPlugin = plugin;
     // 自带的插件不需要检测更新
     if (plugin.name === 'rubick-system-feature') return;
+    // 本地开发插件不需要检测更新
+    if (plugin.type === 'local') return;
     await pluginInstance.upgrade(plugin.name);
     state.pluginLoading = false;
   };

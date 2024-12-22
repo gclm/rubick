@@ -39,7 +39,7 @@ import getWindowHeight from '../common/utils/getWindowHeight';
 import createPluginManager from './plugins-manager';
 import useDrag from '../common/utils/dragWindow';
 import { getGlobal } from '@electron/remote';
-import { PLUGIN_HISTORY } from '@/common/constans/renderer';
+import { PLUGIN_HISTORY } from '@/common/constants/renderer';
 import { message } from 'ant-design-vue';
 import localConfig from './confOp';
 

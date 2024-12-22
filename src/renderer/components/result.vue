@@ -7,7 +7,7 @@
       <a-row>
         <a-col
           @click="() => openPlugin(item)"
-          @contextmenu.prevent="openMenu($event,item)"
+          @contextmenu.prevent="openMenu($event, item)"
           :class="
             currentSelect === index ? 'active history-item' : 'history-item'
           "
@@ -16,7 +16,7 @@
           :key="index"
         >
           <a-avatar style="width: 28px; height: 28px" :src="item.icon" />
-          <div class="name ellpise">
+          <div class="name ellipse">
             {{ item.cmd || item.pluginName || item._name || item.name }}
           </div>
           <div class="badge" v-if="item.pin"></div>
@@ -68,8 +68,14 @@ const props: any = defineProps({
     default: 0,
   },
   currentPlugin: {},
-  pluginHistory: (() => [])(),
-  clipboardFile: (() => [])(),
+  pluginHistory: {
+    type: Function,
+    default: () => [],
+  },
+  clipboardFile: {
+    type: Function,
+    default: () => [],
+  },
 });
 
 const emit = defineEmits(['choosePlugin', 'setPluginHistory']);
@@ -138,7 +144,9 @@ const initMainCmdMenus = () => {
       label: '从"使用记录"中删除',
       icon: path.join(__static, 'icons', 'delete@2x.png'),
       click: () => {
-        const history = props.pluginHistory.filter((item) => item.name !== menuState.plugin.name);
+        const history = props.pluginHistory.filter(
+          (item) => item.name !== menuState.plugin.name
+        );
         emit('setPluginHistory', toRaw(history));
       },
     },
@@ -178,7 +186,7 @@ initMainCmdMenus();
 </script>
 
 <style lang="less">
-.ellpise {
+.ellipse {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

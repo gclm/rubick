@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref } from 'vue';
+import { defineProps, defineEmits, ref, onMounted, onUnmounted } from 'vue';
 import { ipcRenderer } from 'electron';
 import { MoreOutlined } from '@ant-design/icons-vue';
 
@@ -70,10 +70,18 @@ const props: any = defineProps({
     type: String,
     default: '',
   },
-  pluginHistory: (() => [])(),
-  currentPlugin: {},
+  pluginHistory: {
+    type: Array,
+    default: (() => [])(),
+  },
+  currentPlugin: {
+    type: Object,
+  },
   pluginLoading: Boolean,
-  clipboardFile: (() => [])(),
+  clipboardFile: {
+    type: Array,
+    default: (() => [])(),
+  },
 });
 
 const changeValue = (e) => {
@@ -240,8 +248,12 @@ const changeHideOnBlur = () => {
 };
 
 const getIcon = () => {
-  if (props.clipboardFile[0].dataUrl) return props.clipboardFile[0].dataUrl;
+  if (props.clipboardFile[0].dataUrl) {
+    console.log(props.clipboardFile[0].dataUrl);
+    return props.clipboardFile[0].dataUrl;
+  }
   try {
+    console.log(props.clipboardFile[0].path);
     return ipcRenderer.sendSync('msg-trigger', {
       type: 'getFileIcon',
       data: { path: props.clipboardFile[0].path },

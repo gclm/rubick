@@ -1,4 +1,4 @@
-import { app, BrowserWindow, protocol, nativeTheme } from 'electron';
+import { app, BrowserWindow, protocol, nativeTheme, screen } from 'electron';
 import path from 'path';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 // import versonHandler from '../common/versionHandler';
@@ -7,7 +7,7 @@ import {
   WINDOW_HEIGHT,
   WINDOW_MIN_HEIGHT,
   WINDOW_WIDTH,
-} from '@/common/constans/common';
+} from '@/common/constants/common';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('@electron/remote/main').initialize();
 
@@ -27,6 +27,8 @@ export default () => {
       useContentSize: true,
       resizable: true,
       width: WINDOW_WIDTH,
+      minWidth: WINDOW_WIDTH,
+      maxWidth: WINDOW_WIDTH,
       frame: false,
       title: '拉比克',
       show: false,
@@ -79,6 +81,13 @@ export default () => {
         win.hide();
       }
     });
+
+    // 显示器缩放适配
+    // win.on('resize', async () => {
+    //   const { width, height } = win.getSize();
+    //   const { scaleFactor } = screen.getPrimaryDisplay();
+    //   win.setSize(width * scaleFactor, height * scaleFactor);
+    // });
   };
 
   const getWindow = () => win;

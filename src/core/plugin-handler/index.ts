@@ -34,10 +34,22 @@ class AdapterHandler {
     // 初始化插件存放
     if (!fs.existsSync(options.baseDir)) {
       fs.mkdirsSync(options.baseDir);
-      fs.writeFileSync(
-        `${options.baseDir}/package.json`,
-        '{"dependencies":{}}'
-      );
+    } else {
+      fs.stat(`${options.baseDir}/package.json`, (err, stats) => {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            // 文件不存在
+            fs.writeFileSync(
+              `${options.baseDir}/package.json`,
+              '{"dependencies":{}}'
+            );
+          } else {
+            // 其他错误
+          }
+        } else {
+          // 文件存在
+        }
+      });
     }
     this.baseDir = options.baseDir;
 
@@ -115,6 +127,37 @@ class AdapterHandler {
     await this.execCommand(installCmd, adapters);
   }
 
+  async devInstall(adapters: Array<string>, options: { isDev: boolean }) {
+    const pluginPath = adapters[0];
+    const pluginName = adapters[1];
+    await this.copyFolderAsync(
+      pluginPath,
+      path.resolve(this.baseDir, 'node_modules', pluginName)
+    );
+  }
+
+  async copyFolderAsync(source: string, target: string) {
+    try {
+      await fs.mkdir(target, { recursive: true });
+      const files = await fs.readdir(source);
+      for (const file of files) {
+        const sourcePath = path.join(source, file);
+        const targetPath = path.join(target, file);
+        const stat = await fs.stat(sourcePath);
+        if (stat.isDirectory()) {
+          // 如果是文件夹，递归复制
+          await this.copyFolderAsync(sourcePath, targetPath);
+        } else {
+          // 如果是文件，直接复制
+          await fs.copyFile(sourcePath, targetPath);
+        }
+      }
+      console.log('copy success！');
+    } catch (error) {
+      console.error('copy error:', error);
+    }
+  }
+
   /**
    * 更新指定插件
    * @param {...string[]} adapters 插件名称
@@ -130,10 +173,42 @@ class AdapterHandler {
    * @param options
    * @memberof AdapterHandler
    */
-  async uninstall(adapters: string[], options: { isDev: boolean }) {
-    const installCmd = options.isDev ? 'unlink' : 'uninstall';
-    // 卸载插件
-    await this.execCommand(installCmd, adapters);
+  async uninstall(
+    adapters: string[],
+    options: { isDev: boolean; type: string }
+  ) {
+    if (options.isDev && options.type === 'local') {
+      // 递归删除
+      for (const adapter of adapters) {
+        await this.deleteFolderRecursive(
+          path.resolve(this.baseDir, 'node_modules', adapter)
+        );
+      }
+    } else {
+      const installCmd = options.isDev ? 'unlink' : 'uninstall';
+      // 卸载插件;
+      await this.execCommand(installCmd, adapters);
+    }
+  }
+
+  async deleteFolderRecursive(folderPath: string) {
+    if (fs.existsSync(folderPath)) {
+      fs.readdirSync(folderPath).forEach((file) => {
+        const curPath = path.join(folderPath, file);
+        if (fs.lstatSync(curPath).isDirectory()) {
+          // 递归删除子文件夹
+          this.deleteFolderRecursive(curPath);
+        } else {
+          // 删除文件
+          fs.unlinkSync(curPath);
+        }
+      });
+      // 删除空文件夹
+      fs.rmdirSync(folderPath);
+      console.log(`Folder deleted: ${folderPath}`);
+    } else {
+      console.log(`Folder not found: ${folderPath}`);
+    }
   }
 
   /**

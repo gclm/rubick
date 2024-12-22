@@ -1,13 +1,13 @@
 import { BrowserView, BrowserWindow, session } from 'electron';
 import path from 'path';
 import commonConst from '../../common/utils/commonConst';
-import { PLUGIN_INSTALL_DIR as baseDir } from '@/common/constans/main';
+import { PLUGIN_INSTALL_DIR as baseDir } from '@/common/constants/main';
 import localConfig from '@/main/common/initLocalConfig';
 import {
   WINDOW_HEIGHT,
   WINDOW_PLUGIN_HEIGHT,
   WINDOW_WIDTH,
-} from '@/common/constans/common';
+} from '@/common/constants/common';
 
 const getRelativePath = (indexPath) => {
   return commonConst.windows()
@@ -39,7 +39,7 @@ const viewPoolManager = () => {
   };
   const maxLen = 4;
   return {
-    getView(pluginName) {
+    getView(pluginName: any) {
       return viewPool.views.find((view) => view.pluginName === pluginName);
     },
     addView(pluginName, view) {
@@ -113,7 +113,7 @@ export default () => {
     let darkMode;
     // 开发环境
     if (commonConst.dev() && development) {
-      pluginIndexPath = development;
+      // pluginIndexPath = development;
       const pluginPath = path.resolve(baseDir, 'node_modules', name);
       preloadPath = `file://${path.join(pluginPath, './', main)}`;
     }

@@ -17,7 +17,7 @@ import ks from 'node-key-sender';
 import {
   DECODE_KEY,
   PLUGIN_INSTALL_DIR as baseDir,
-} from '@/common/constans/main';
+} from '@/common/constants/main';
 import getCopyFiles from '@/common/utils/getCopyFiles';
 import common from '@/common/utils/commonConst';
 

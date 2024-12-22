@@ -15,9 +15,9 @@
         :wrapper-col="wrapperCol"
       >
         <a-form-item :label="$t('feature.dev.pluginName')" name="name">
-          <a-input v-model:value="formState.name" />
+          <a-input v-model:value="formState.name" v-on:click="clickInput" />
         </a-form-item>
-    
+
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
           <a-button :loading="loading" type="primary" @click="onSubmit">
             {{ $t('feature.dev.install') }}
@@ -35,6 +35,8 @@
 import { reactive, ref } from 'vue';
 import { message } from 'ant-design-vue';
 import { useI18n } from 'vue-i18n';
+import path from 'path';
+import fs from 'fs';
 const { t } = useI18n();
 
 const formRef = ref();
@@ -47,20 +49,34 @@ const rules = {
     message: 'Please input name',
   },
 };
+
+const clickInput = () => {
+  const pluginPath = window.market.localSelect({
+    title: '请选择插件或者选择插件编译后的dist目录',
+    filters: [{ name: 'zip', extensions: ['zip'] }],
+    buttonLabel: '确认',
+    properties: ['openDirectory'],
+  });
+  console.log(pluginPath);
+  if (pluginPath.length > 0) {
+    downloadPlugin(pluginPath[0]);
+  }
+};
 const onSubmit = () => {
   formRef.value.validate().then(() => {
-    downloadPlugin(formState.name);
+    // downloadPlugin(formState.name);
   });
 };
 
 const loading = ref(false);
-const downloadPlugin = async (pluginName) => {
+const downloadPlugin = async (path) => {
   loading.value = true;
-  await window.market.downloadPlugin({
-    name: pluginName,
+  await window.market.devInstall({
+    path: path,
     isDev: true,
+    type: 'local',
   });
-  message.success(t('feature.dev.installSuccess', { pluginName: pluginName }));
+  message.success(t('feature.dev.installSuccess'));
   loading.value = false;
 };
 
@@ -85,12 +101,14 @@ const wrapperCol = { span: 14 };
   width: 100%;
   overflow-x: hidden;
   height: calc(~'100vh - 34px');
+
   .view-title {
     font-size: 16px;
     font-weight: 500;
     margin-bottom: 16px;
     color: var(--color-text-primary);
   }
+
   .view-container {
     padding: 10px;
     box-sizing: border-box;
@@ -99,9 +117,11 @@ const wrapperCol = { span: 14 };
     overflow: auto;
     height: calc(~'100vh - 84px');
   }
+
   :deep(label) {
     color: var(--color-text-content);
   }
+
   :deep(.ant-input) {
     background: var(--color-input-hover) !important;
     color: var(--color-text-content);
