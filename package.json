@@ -79,5 +79,8 @@
   "resolutions": {
     "vue-cli-plugin-electron-builder/electron-builder": "^23.0.3",
     "leveldown": "6.0.3"
+  },
+  "volta": {
+    "node": "16.20.2"
   }
 }

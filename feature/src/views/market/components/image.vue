@@ -22,6 +22,7 @@ const data = ref([]);
 
 onBeforeMount(async () => {
   data.value = await request.getImageDetail();
+  console.log(data.value);
 });
 
 const system = computed(() => {

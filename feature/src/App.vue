@@ -42,6 +42,12 @@
           </template>
           {{ $t('feature.market.systemTool') }}
         </a-menu-item>
+        <a-menu-item key="localPlugin">
+          <template #icon>
+            <ApiOutlined style="font-size: 16px" />
+          </template>
+          {{ $t('feature.market.localPlugin') }}
+        </a-menu-item>
         <a-sub-menu class="user-info">
           <template #icon>
             <a-avatar :size="32">
@@ -82,6 +88,7 @@
           'tools',
           'worker',
           'system',
+          'localPlugin',
         ].includes(active[0])
           ? 'container'
           : 'more'
@@ -107,6 +114,7 @@ import {
   SettingOutlined,
   HeartOutlined,
   BugOutlined,
+  ApiOutlined,
 } from '@ant-design/icons-vue';
 import { useStore } from 'vuex';
 import localConfig from '@/confOp';
