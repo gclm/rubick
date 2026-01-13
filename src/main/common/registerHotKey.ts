@@ -61,7 +61,11 @@ const registerHotKey = (mainWindow: BrowserWindow): void => {
   // 显示主窗口
   function mainWindowPopUp() {
     const currentShow = mainWindow.isVisible() && mainWindow.isFocused();
-    if (currentShow) return mainWindow.hide();
+    if (currentShow) {
+      mainWindow.blur(); // 先失去焦点，使焦点恢复到之前的应用程序
+      mainWindow.hide();
+      return;
+    }
     const { x: wx, y: wy } = winPosition.getPosition();
     mainWindow.setAlwaysOnTop(false);
     mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
