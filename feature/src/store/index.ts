@@ -11,7 +11,7 @@ const isDownload = (item: Market.Plugin, targets: any[]) => {
   });
   return isDownload;
 };
-
+const LOCAL_PLUGIN_JSON = 'localPluginJson';
 export default createStore({
   state: {
     totalPlugins: [],
@@ -30,8 +30,25 @@ export default createStore({
     },
   },
   actions: {
+    async saveLocalPlugins({ dispatch, state }, plugins) {
+      // 先移除
+      window.rubick.db.remove(LOCAL_PLUGIN_JSON);
+      window.rubick.db.put({
+        _id: LOCAL_PLUGIN_JSON,
+        data: JSON.stringify(plugins),
+      });
+      await dispatch('init');
+    },
+    async deleteLocalPlugins({ dispatch, state }) {
+      // 先移除
+      window.rubick.db.remove(LOCAL_PLUGIN_JSON);
+      await dispatch('init');
+    },
     async init({ commit }) {
-      const totalPlugins = await request.getTotalPlugins();
+      const tPlugins = await request.getTotalPlugins();
+      const lTPlugins = window.rubick.db.get(LOCAL_PLUGIN_JSON);
+      const totalPlugins = tPlugins.concat(JSON.parse(lTPlugins?.data || '[]'));
+
       const localPlugins = window.market.getLocalPlugins();
 
       totalPlugins.forEach((origin: Market.Plugin) => {

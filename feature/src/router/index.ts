@@ -32,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/market/components/system.vue'),
   },
   {
+    path: '/localPlugin',
+    name: 'localPlugin',
+    component: () => import('../views/market/components/local-plugin.vue'),
+  },
+  {
     path: '/finder',
     name: 'finder',
     component: () => import('../views/market/components/finder.vue'),
@@ -56,6 +61,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'dev',
     component: () => import('../views/dev/index.vue'),
   },
+
   {
     path: '/:catchAll(.*)',
     name: 'finder',

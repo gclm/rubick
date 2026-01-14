@@ -11,15 +11,18 @@ import {
   Form,
   Input,
   Radio,
+  Typography,
   Select,
   Switch,
   Avatar,
+  Popconfirm,
   Collapse,
   List,
   Tooltip,
   Alert,
   Drawer,
   Modal,
+  Upload,
   Result,
   Spin,
 } from 'ant-design-vue';
@@ -73,6 +76,9 @@ createApp(App)
   .use(Modal)
   .use(Result)
   .use(Spin)
+  .use(Upload)
+  .use(Popconfirm)
+  .use(Typography)
   .use(router)
   .use(Vue3Lottie)
   .mount('#app');
